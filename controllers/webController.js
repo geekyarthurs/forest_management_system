@@ -60,10 +60,10 @@ exports.importTrees = async (req, res) => {
     let updateTree = await Trees.create(req.body);
 
     console.log(updateTree);
-    res.render("imported-forests", { message: req.flash("message") });
+    res.redirect("/forest-record")
   } catch (err) {
     req.flash("message", "Forest Already Exists in the database.");
-    res.redirect("/import-forest");
+    res.redirect("/forest-record");
   }
 };
 
@@ -90,7 +90,9 @@ exports.sellForestScreen = async (req, res) => {
     .lean();
   let year = new Date().getFullYear();
 
-  console.log(data);
+  // console.log(data);
+
+  console.log(treeThisYear);
 
   res.render("sell-trees", {
     leftQuantity: treeThisYear.quantity - soldQuantity,
@@ -112,9 +114,20 @@ exports.sellForest = async (req, res) => {
     price: req.body.price,
     quantity: req.body.quantity
   });
+  let leftTrees = req.body.left * 1 - req.body.quantity;
+
+  console.log(leftTrees);
+
+
+  let treeUpdate = await Trees.updateOne(
+    { year: new Date().getFullYear() },
+    {
+      soldQuantity: req.body.quantity
+    }
+  );
 
   console.log(transacted);
-  return res.redirect("/view-transactions")
+  return res.redirect("/view-transactions");
 };
 
 exports.viewTransactions = async (req, res) => {
