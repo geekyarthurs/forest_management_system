@@ -23,17 +23,36 @@ router
   .get(authController.checkIfLoggedIn, memberController.createPage)
   .post(authController.checkIfLoggedIn, memberController.create);
 
-router
-  .route("/customers")
-  .get( memberController.viewAllMembers);
+router.route("/customers").get(memberController.viewAllMembers);
 
 router
   .route("/update-customer")
   .get(memberController.updatePage)
   .post(memberController.update);
 
-router.route("/delete-customer")
-.get(memberController.delete)
+router.route("/delete-customer").get(memberController.delete);
+
+router
+  .route("/import-forest")
+  .get(webController.importTreesScreen)
+  .post(webController.importTrees);
+
+
+  router.get("/forest-record",webController.forestRecord)
+
+  router.get("/sell-forest",webController.sellForestScreen)
+  router.post("/sell-forest",webController.sellForest)
+
+
+
+
+  router.get("/view-transactions", webController.viewTransactions)
+
+
+
+
+
+
 router.get("*", webController.error);
 
 module.exports = router;

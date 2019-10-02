@@ -15,6 +15,10 @@ let memberSchema = mongoose.Schema({
       type: String,
       required: true,
       maxLength: [20, "Invalid Location"]
+  },
+  purchasedTrees : {
+    type: Number,
+    default: 0
   }
 });
 

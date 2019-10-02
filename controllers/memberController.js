@@ -66,11 +66,18 @@ exports.createPage = async (req, res) => {
 
 exports.viewAllMembers = async (req, res) => {
   let customers = await Member.find()
-    .select("-__v -_id")
+    .select("-__v -_id -purchasedTrees")
     .lean();
 
   // let customersList = customers.lean()
   //   console.log(customers)
+
+  if(customers.length == 0){
+
+   return res.render("404");
+
+  }
+
   const theads = Object.keys(customers[0]);
 
   customers.forEach(doc => {
