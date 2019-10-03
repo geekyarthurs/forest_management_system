@@ -5,70 +5,137 @@
 
     <!-- Page Heading -->
     <h1 class="h3 mb-4 text-gray-800">Sell Trees.</h1>
-    <form class="user" action="/sell-forest" method="post">
-        <%     message.forEach((x) => { %>
+    <div class="row">
+        <form class="user col-sm-3 mx-5 mt-5" action="/sell-forest" method="post">
+            <%     message.forEach((x) => { %>
 
-        <div class="alert alert-success" role="alert">
-            <%= x  %>
-        </div>
+            <div class="alert alert-success" role="alert">
+                <%= x  %>
+            </div>
 
-        <%          }) %>
-        <h5 class = "my-1"> Left  Quantity :  <%- leftQuantity %> </h5>
-      
-              
-            <div class=" form-group col-sm-3">
+            <%          }) %>
+           
+            <div class=" form-group">
 
-               
-              
-                <input type = "hidden" name ="left" value ="<%= leftQuantity  %>">
+
+
+         
                 <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Quantity"
                     name="quantity" required>
             </div>
 
-            <div class="form-group col-sm-3">
-                    <select name = "quality" class ="form-control">
-                        <option selected>Select Quality</option>    
-                        <option>A</option>
-                            <option>B</option>
-                            <option>C</option>
-                         </select>
+            <div class="form-group">
+                <select name="quality" class="form-control">
+                    <option selected>Select Quality</option>
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                </select>
             </div>
-            
-           
 
 
 
-       
 
-        <div class="form-group col-sm-3">
 
-            <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Price"
-            name="price" required>
 
-            
 
+            <div class="form-group">
+
+                <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Price"
+                    name="price" required>
+
+
+
+            </div>
+
+
+
+            <div class="form-group">
+                <select name="customer" class="form-control">
+                    <% data.forEach(customer => { %>
+
+                    <option><%- customer.fullName %></option>
+
+                    <%         }) %>
+                </select>
+            </div>
+
+
+
+            <button type="submit" class="btn btn-primary btn-user btn-block">
+                Submit Data
+            </button>
+            <hr>
+
+        </form>
+        <div class ="col-sm-8">
+                <div class="row">
+
+                        <%   treeData.forEach(record => { %>
+        
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-action active">
+                                Record of <%= record.year %> | <%= record.updatedBy%>
+                            </a>
+                          
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class = "row">
+                                    <div class ="col-sm-3">
+                                            Total A
+                                                    <%= record.quantityA %>
+                                    </div>
+                                    <div class ="col-sm-3">
+                                            Sold A
+                                                    <%= record.soldQuantityA %>
+                                    </div>
+                                    <div class ="col-sm-3">
+                                            Left A
+                                                    <%= record.quantityA - record.soldQuantityA %>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                    <div class = "row">
+                                        <div class ="col-sm-3">
+                                                Total B
+                                                        <%= record.quantityB %>
+                                        </div>
+                                        <div class ="col-sm-3">
+                                                Sold B
+                                                        <%= record.soldQuantityB %>
+                                        </div>
+                                        <div class ="col-sm-3">
+                                                Left B
+                                                        <%= record.quantityB - record.soldQuantityB %>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                        <div class = "row">
+                                            <div class ="col-sm-3">
+                                                    Total C
+                                                            <%= record.quantityC %>
+                                            </div>
+                                            <div class ="col-sm-3">
+                                                    Sold C
+                                                            <%= record.soldQuantityC %>
+                                            </div>
+                                            <div class ="col-sm-3">
+                                                    Left C
+                                                            <%= record.quantityC - record.soldQuantityC %>
+                                            </div>
+                                        </div>
+                                    </a>
+                           
+                            
+                        </div>
+        
+        
+                        <%     }) %>
+        
+                    </div>
         </div>
-
-       
-
-        <div class = "form-group col-sm-3">
-                <select name = "customer" class ="form-control">
-                        <% data.forEach(customer => { %>
-         
-                             <option><%- customer.fullName %></option>
-         
-                <%         }) %>
-                     </select>
-        </div>
-
-
-
-        <button type="submit" class="btn btn-primary btn-user btn-block col-sm-3">
-            Submit Data
-        </button>
-        <hr>
-
-    </form>
+    </div>
 
 </div>
 <!-- /.container-fluid -->

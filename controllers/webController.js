@@ -6,22 +6,35 @@ exports.dashboard = async (req, res) => {
     .select("quantity soldQuantity soldQuantityA soldQuantityB soldQuantityC")
     .lean();
 
+  if (!tree) {
+    tree = {};
+    tree.quantity = 0;
+    tree.soldQuantityA = 0;
+    tree.soldQuantityB = 0;
+    tree.soldQuantityC = 0;
+  }
+
   let treeQuantity = tree.quantity;
+  let soldQuantityA = tree.soldQuantityA;
+  let soldQuantityB = tree.soldQuantityB;
+  let soldQuantityC = tree.soldQuantityC;
+
   let soldQuantity = tree.soldQuantity;
   let leftQuantity = treeQuantity - soldQuantity;
 
-  let transactions = await Transaction.find()
-    .select("price")
-    .lean();
+  let transactions = await Transaction.find().lean();
   let earning = 0;
   transactions.forEach(transaction => {
     earning += transaction.price;
   });
 
-  let leftPercentage = (leftQuantity / treeQuantity) * 100
-
+  let leftPercentage = (leftQuantity / treeQuantity) * 100;
 
   res.render("dashboard", {
+    transactions,
+    soldQuantityA,
+    soldQuantityB,
+    soldQuantityC,
     quantity: tree.quantity,
     leftQuantity,
     earning,
@@ -40,7 +53,7 @@ exports.error = (req, res) => {
 
 exports.importTrees = async (req, res) => {
   if (
-    req.body.quantityC + req.body.quantityB + req.body.quantityA >
+    req.body.quantityC + req.body.quantityB + req.body.quantityA ==
     req.body.quantity
   ) {
     req.flash(
@@ -83,10 +96,14 @@ exports.forestRecord = async (req, res) => {
 };
 
 exports.sellForestScreen = async (req, res) => {
-  let treeThisYear = await Trees.findOne({ year: new Date().getFullYear() });
-  const { soldQuantity } = treeThisYear;
+  let treeData = await Trees.find()
+    .select("-_id -__v")
+    .sort("year")
+    .lean();
 
-  console.log(treeThisYear);
+  // const { soldQuantity } = treeThisYear;
+
+  // console.log(treeThisYear);
   let data = await Member.find()
     .select("fullName")
     .lean();
@@ -94,10 +111,10 @@ exports.sellForestScreen = async (req, res) => {
 
   // console.log(data);
 
-  console.log(treeThisYear);
+  // console.log(treeThisYear);
 
   res.render("sell-trees", {
-    leftQuantity: treeThisYear.quantity - soldQuantity,
+    treeData,
     year,
     data,
     message: req.flash("message")
@@ -116,20 +133,20 @@ exports.sellForest = async (req, res) => {
   if (quality == "A") {
     data = await Member.updateOne(
       { fullName: req.body.customer },
-      { purchasedTrees: user.purchasedTrees + req.body.quantity },
-      { purchasedTreesA: user.purchasedTreesA + req.body.quantity }
+      { purchasedTrees: user.purchasedTrees * 1 + req.body.quantity * 1 },
+      { purchasedTreesA: user.purchasedTreesA * 1 + req.body.quantity * 1 }
     );
   } else if (quality == "B") {
     data = await Member.updateOne(
       { fullName: req.body.customer },
-      { purchasedTrees: user.purchasedTrees + req.body.quantity },
-      { purchasedTreesB: user.purchasedTreesB + req.body.quantity }
+      { purchasedTrees: user.purchasedTrees * 1 + req.body.quantity },
+      { purchasedTreesB: user.purchasedTreesB * 1 + req.body.quantity * 1 }
     );
   } else {
     data = await Member.updateOne(
       { fullName: req.body.customer },
-      { purchasedTrees: user.purchasedTrees + req.body.quantity },
-      { purchasedTreesC: user.purchasedTreesC + req.body.quantityC }
+      { purchasedTrees: user.purchasedTrees * 1 + req.body.quantity * 1 },
+      { purchasedTreesC: user.purchasedTreesC * 1 + req.body.quantityC * 1 }
     );
   }
   let transacted = await Transaction.create({
@@ -138,7 +155,7 @@ exports.sellForest = async (req, res) => {
     quantity: req.body.quantity,
     quality: req.body.quality
   });
-  let leftTrees = InitialTrees.quantity - InitialTrees.soldQuantity;
+  let leftTrees = InitialTrees.quantity * 1 - InitialTrees.soldQuantity * 1;
 
   console.log(leftTrees);
 
@@ -146,24 +163,24 @@ exports.sellForest = async (req, res) => {
     let treeUpdate = await Trees.updateOne(
       { year: new Date().getFullYear() },
       {
-        soldQuantity: req.body.quantity,
-        soldQuantityA: req.body.quantity
+        soldQuantity: InitialTrees.soldQuantity * 1 + req.body.quantity * 1,
+        soldQuantityA: InitialTrees.soldQuantityB * 1 + req.body.quantity * 1
       }
     );
   } else if (quality == "B") {
     let treeUpdate = await Trees.updateOne(
       { year: new Date().getFullYear() },
       {
-        soldQuantity: req.body.quantity,
-        soldQuantityB: req.body.quantity
+        soldQuantity: InitialTrees.soldQuantity * 1 + req.body.quantity * 1,
+        soldQuantityB: InitialTrees.soldQuantityB * 1 + req.body.quantity * 1
       }
     );
   } else {
     let treeUpdate = await Trees.updateOne(
       { year: new Date().getFullYear() },
       {
-        soldQuantity: req.body.quantity,
-        soldQuantityC: req.body.quantity
+        soldQuantity: InitialTrees.soldQuantity * 1 + req.body.quantity * 1,
+        soldQuantityC: InitialTrees.soldQuantityC * 1 + req.body.quantity * 1
       }
     );
   }

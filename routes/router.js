@@ -45,22 +45,22 @@ router.route("/customers").get(memberController.viewAllMembers);
 
 router
   .route("/update-customer")
-  .get(memberController.updatePage)
-  .post(memberController.update);
+  .get(authController.checkIfLoggedIn,memberController.updatePage)
+  .post(authController.checkIfLoggedIn,memberController.update);
 
-router.route("/delete-customer").get(memberController.delete);
+router.route("/delete-customer").get(authController.checkIfLoggedIn,memberController.delete);
 
 router
   .route("/import-forest")
-  .get(webController.importTreesScreen)
-  .post(webController.importTrees);
+  .get(authController.checkIfLoggedIn,webController.importTreesScreen)
+  .post(authController.checkIfLoggedIn,webController.importTrees);
 
-router.get("/forest-record", webController.forestRecord);
+router.get("/forest-record",authController.checkIfLoggedIn, webController.forestRecord);
 
-router.get("/sell-forest", webController.sellForestScreen);
-router.post("/sell-forest", webController.sellForest);
+router.get("/sell-forest",authController.checkIfLoggedIn, webController.sellForestScreen);
+router.post("/sell-forest",authController.checkIfLoggedIn, webController.sellForest);
 
-router.get("/view-transactions", webController.viewTransactions);
+router.get("/view-transactions",authController.checkIfLoggedIn, webController.viewTransactions);
 
 router.get("*", webController.error);
 
