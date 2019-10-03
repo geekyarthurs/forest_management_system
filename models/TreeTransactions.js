@@ -16,6 +16,10 @@ let treeTransaction = mongoose.Schema({
   quantity: {
     type: Number,
     required: true
+  },
+  quality: {
+    type: String,
+    required: true
   }
 });
 

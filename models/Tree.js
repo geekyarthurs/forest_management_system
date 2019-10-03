@@ -21,6 +21,30 @@ const treeSchema = mongoose.Schema({
   soldQuantity: {
     type: Number,
     default: 0
+  },
+  quantityA: {
+    type: Number,
+    required: true
+  },
+  quantityB: {
+    type: Number,
+    required: true
+  },
+  quantityC: {
+    type: Number,
+    required: true
+  },
+  soldQuantityA: {
+    type: Number,
+    default: 0
+  },
+  soldQuantityB: {
+    type: Number,
+    default: 0
+  },
+  soldQuantityC: {
+    type: Number,
+    default: 0
   }
 });
 

@@ -5,7 +5,7 @@
 
   <!-- Page Heading -->
   <h1 class="h3 mb-4 text-gray-800">Add New Community Member.</h1>
-  <form class="user" action="/create-customer" method="post">
+  <form class="user" action="/create-customer" method="post" enctype="multipart/form-data">
 
     <div class="form-group row">
       <div class="col-sm-6 mb-3 mb-sm-0">
@@ -25,6 +25,12 @@
       <input type="text" class="form-control form-control-user" id="exampleInputEmail" placeholder="Location"
         name="location" required>
     </div>
+
+    <div class="form-group">
+        <input type="file" class="form-control form-control-user" name="profilePic" />
+      </div>
+
+
 
 
     <button type="submit" class="btn btn-primary btn-user btn-block">

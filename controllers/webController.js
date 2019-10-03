@@ -3,44 +3,30 @@ const Member = require("../models/Member");
 const Transaction = require("../models/TreeTransactions");
 exports.dashboard = async (req, res) => {
   let tree = await Trees.findOne({ year: new Date().getFullYear() })
-    .select("quantity")
+    .select("quantity soldQuantity soldQuantityA soldQuantityB soldQuantityC")
     .lean();
 
-  let totalPriceArr = await Transaction.find()
-    .select("price quantity")
+  let treeQuantity = tree.quantity;
+  let soldQuantity = tree.soldQuantity;
+  let leftQuantity = treeQuantity - soldQuantity;
+
+  let transactions = await Transaction.find()
+    .select("price")
     .lean();
-
-  let totalEarning = 0;
-  let soldQuantity = 0;
-
-  if (!tree || !totalPriceArr) {
-    return res.render("dashboard", {
-      quantity: "Not added.",
-      earning: "No earnings.",
-      leftPercentage: "Unavailable",
-      transactionsCount: "No transactions yet."
-    });
-  }
-
-  totalPriceArr.forEach(x => {
-    totalEarning += x.price;
-    soldQuantity += x.quantity;
+  let earning = 0;
+  transactions.forEach(transaction => {
+    earning += transaction.price;
   });
 
-  let leftPercentage = parseInt(
-    ((tree.quantity - soldQuantity) / tree.quantity) * 100
-  );
+  let leftPercentage = (leftQuantity / treeQuantity) * 100
 
-  console.log(leftPercentage);
-
-  console.log(tree.quantity);
-  console.log(totalEarning);
 
   res.render("dashboard", {
     quantity: tree.quantity,
-    earning: totalEarning,
+    leftQuantity,
+    earning,
     leftPercentage,
-    transactionsCount: totalPriceArr.length
+    transactionsCount: transactions.length
   });
 };
 
@@ -53,6 +39,17 @@ exports.error = (req, res) => {
 };
 
 exports.importTrees = async (req, res) => {
+  if (
+    req.body.quantityC + req.body.quantityB + req.body.quantityA >
+    req.body.quantity
+  ) {
+    req.flash(
+      "error",
+      "Total Quantity should be equal to sum of all quantities."
+    );
+    return res.redirect("/import-forest");
+  }
+
   try {
     let data = req.body;
     data.updatedBy = req.session.user.fullName;
@@ -60,22 +57,27 @@ exports.importTrees = async (req, res) => {
     let updateTree = await Trees.create(req.body);
 
     console.log(updateTree);
-    res.redirect("/forest-record")
+    res.redirect("/forest-record");
   } catch (err) {
-    req.flash("message", "Forest Already Exists in the database.");
+    req.flash("error", "Forest Already Exists in the database.");
     res.redirect("/forest-record");
   }
 };
 
 exports.importTreesScreen = (req, res) => {
-  res.render("import-forest", { message: req.flash("message") });
+  res.render("import-forest", {
+    message: req.flash("message"),
+    error: req.flash("error")
+  });
 };
 
 exports.forestRecord = async (req, res) => {
   let data = await Trees.find()
-    .select("-_id -__v -soldQuantity")
+    .select("-_id -__v")
     .sort("year")
     .lean();
+
+  console.log(data);
 
   res.render("imported-forests", { data, message: req.flash("message") });
 };
@@ -103,28 +105,68 @@ exports.sellForestScreen = async (req, res) => {
 };
 
 exports.sellForest = async (req, res) => {
-  //quantity , price , cusotomer
+  //quantity , price , cusotomer , quality
   console.log(req.body);
-  let data = await Member.updateOne(
-    { fullName: req.body.customer },
-    { purchasedTrees: req.body.quantity }
-  );
+  const user = await Member.findOne({ fullName: req.body.customer }).lean();
+  const InitialTrees = await Trees.findOne({
+    year: new Date().getFullYear()
+  }).lean();
+  const quality = req.body.quality;
+  let data;
+  if (quality == "A") {
+    data = await Member.updateOne(
+      { fullName: req.body.customer },
+      { purchasedTrees: user.purchasedTrees + req.body.quantity },
+      { purchasedTreesA: user.purchasedTreesA + req.body.quantity }
+    );
+  } else if (quality == "B") {
+    data = await Member.updateOne(
+      { fullName: req.body.customer },
+      { purchasedTrees: user.purchasedTrees + req.body.quantity },
+      { purchasedTreesB: user.purchasedTreesB + req.body.quantity }
+    );
+  } else {
+    data = await Member.updateOne(
+      { fullName: req.body.customer },
+      { purchasedTrees: user.purchasedTrees + req.body.quantity },
+      { purchasedTreesC: user.purchasedTreesC + req.body.quantityC }
+    );
+  }
   let transacted = await Transaction.create({
     fullName: req.body.customer,
     price: req.body.price,
-    quantity: req.body.quantity
+    quantity: req.body.quantity,
+    quality: req.body.quality
   });
-  let leftTrees = req.body.left * 1 - req.body.quantity;
+  let leftTrees = InitialTrees.quantity - InitialTrees.soldQuantity;
 
   console.log(leftTrees);
 
-
-  let treeUpdate = await Trees.updateOne(
-    { year: new Date().getFullYear() },
-    {
-      soldQuantity: req.body.quantity
-    }
-  );
+  if (quality == "A") {
+    let treeUpdate = await Trees.updateOne(
+      { year: new Date().getFullYear() },
+      {
+        soldQuantity: req.body.quantity,
+        soldQuantityA: req.body.quantity
+      }
+    );
+  } else if (quality == "B") {
+    let treeUpdate = await Trees.updateOne(
+      { year: new Date().getFullYear() },
+      {
+        soldQuantity: req.body.quantity,
+        soldQuantityB: req.body.quantity
+      }
+    );
+  } else {
+    let treeUpdate = await Trees.updateOne(
+      { year: new Date().getFullYear() },
+      {
+        soldQuantity: req.body.quantity,
+        soldQuantityC: req.body.quantity
+      }
+    );
+  }
 
   console.log(transacted);
   return res.redirect("/view-transactions");

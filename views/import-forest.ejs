@@ -8,22 +8,45 @@
   <form class="user" action="/import-forest" method="post">
     <%     message.forEach((x) => { %>
 
-      <div class="alert alert-success" role="alert">
+    <div class="alert alert-success" role="alert">
+      <%= x  %>
+    </div>
+
+    <%          }) %>
+
+    <%     error.forEach((x) => { %>
+
+      <div class="alert alert-danger" role="alert">
         <%= x  %>
       </div>
-
+  
       <%          }) %>
     <div class="form-group row">
       <div class="col-sm-6 mb-3 mb-sm-0">
-        <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Quantity"
+        <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Total Quantity"
           name="quantity" required>
       </div>
       <div class="col-sm-6 mb-3 mb-sm-0">
-          <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Year"
-            name="quantity" required disabled value="<%= new Date().getFullYear() %>">
-        </div>
+        <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Year"
+          required disabled value="<%= new Date().getFullYear() %>">
       </div>
-      
+    </div>
+
+    <div class="form-group row">
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Quantity of A"
+          name="quantityA" required>
+      </div>
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Quantity of B"
+          name="quantityB">
+      </div>
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Quantity of C"
+          name="quantityC" required>
+      </div>
+    </div>
+
 
 
     <button type="submit" class="btn btn-primary btn-user btn-block">

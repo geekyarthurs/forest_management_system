@@ -5,6 +5,7 @@ const app = express();
 const flash = require("connect-flash");
 const router = require("./routes/router");
 
+
 app.use(morgan("dev"));
 let sessionOptions = session({
   secret: "Javascript is fucking awesome bitch",

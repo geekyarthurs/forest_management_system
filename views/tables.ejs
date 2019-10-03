@@ -11,66 +11,80 @@
   <div class="card shadow mb-4">
 
     <div class="card-body">
-        <%     message.forEach((x) => { %>
+      <%     message.forEach((x) => { %>
 
-          <div class="alert alert-success" role="alert">
-            <%= x  %>
-          </div>
+      <div class="alert alert-success" role="alert">
+        <%= x  %>
+      </div>
 
-          <%          }) %>
+      <%          }) %>
       <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
-              <%   theads.forEach(x => {  %>
-
-
-
-              <th>
-                <%= x %>
-              </th>
-              <%   })  %>
+              <th>Profile Picture</th>
+              <th>Full Name</th>
+              <th>Contact No.</th>
+              <th>Location</th>
+              <th>All Purchases Quantity</th>
+              <th>A</th>
+              <th>B</th>
+              <th>C</th>
               <th>Update</th>
-            </tr>
+
+
 
 
 
           </thead>
           <tfoot>
 
-            <%   theads.forEach(x => {  %>
-
-
-
-            <th>
-              <%= x %>
-            </th>
-
-            <%   })  %>
-
+            <th>Profile Picture</th>
+            <th>Full Name</th>
+            <th>Contact No.</th>
+            <th>Location</th>
+            <th>All Purchases</th>
+            <th>A</th>
+            <th>B</th>
+            <th>C</th>
             <th>Update</th>
 
           </tfoot>
           <tbody>
+
+            <%    customers.forEach(member => { %>
+
             <tr>
 
-              <%customers.forEach(doc => {
+              <td>
+                <img class="img img-responsive" src="<%- member.profilePic %>" width="200">
+              </td>
 
-                %>
-            <tr><%
-                          Object.values(doc).forEach(data => { %>
+              <td><%= member.fullName %></td>
+              <td><%= member.contact %></td>
+              <td><%= member.location %></td>
+              <td><%= member.purchasedTrees %></td>
+              <td><%= member.purchasedTreesA %></td>
+              <td><%= member.purchasedTreesB %></td>
+              <td><%= member.purchasedTreesC %></td>
 
-              <td><%= data %> </td>
-              <%  });
-                       %> <td><a class="text-dark" href="../update-customer?contact=<%= doc.contact %>"><i
-                    class="fa fa-edit text-success mr-3"></i></a>
-                    
-                    <a class="text-dark" href="../delete-customer?contact=<%= doc.contact %>">
-                    <i class="fa fa-trash text-danger"></i>
-                    </a></td>
-            </tr></a> <%  }); %>
+              <td>
+
+                <a class="text-dark" href="../update-customer?contact=<%= member.contact %>">
+                  <i class="fa fa-edit text-success mr-3"></i></a>
+
+                <a class="text-dark" href="../delete-customer?contact=<%= member.contact %>">
+                  <i class="fa fa-trash text-danger"></i>
+                </a>
+
+              </td>
+
 
             </tr>
+
+
+            <%     }) %>
+
 
           </tbody>
         </table>

@@ -3,9 +3,9 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Forest Community Members</h1>
+    <h1 class="h3 mb-2 text-gray-800">Forest Record.</h1>
 
-    <p>You can press on the user data to edit them.</p>
+    <p>Imported forest Data.</p>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -18,51 +18,77 @@
             </div>
 
             <%          }) %>
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Year</th>
-                            <th>Quantity</th>
-                            <th>updateTime</th>
-                            <th>UpdatedBy</th>
-                        </tr>
+
+            <div class="row">
+
+                <%   data.forEach(record => { %>
+
+                <div class="list-group col-sm-6">
+                    <a href="#" class="list-group-item list-group-item-action active">
+                        Record of <%= record.year %> | <%= record.updatedBy%>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">Total Quantity:
+                            <%= record.quantity %></a>
+
+                            <a href="#" class="list-group-item list-group-item-action">Sold Quantity:
+                                    <%= record.soldQuantity %></a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <div class = "row">
+                            <div class ="col-sm-4">
+                                    Total Quantity of A :
+                                            <%= record.quantityA %>
+                            </div>
+                            <div class ="col-sm-4">
+                                    Sold Quantity of A :
+                                            <%= record.soldQuantityA %>
+                            </div>
+                            <div class ="col-sm-4">
+                                    Left Quantity of A :
+                                            <%= record.quantityA - record.soldQuantityA %>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                            <div class = "row">
+                                <div class ="col-sm-4">
+                                        Total Quantity of B :
+                                                <%= record.quantityB %>
+                                </div>
+                                <div class ="col-sm-4">
+                                        Sold Quantity of B :
+                                                <%= record.soldQuantityB %>
+                                </div>
+                                <div class ="col-sm-4">
+                                        Left Quantity of B :
+                                                <%= record.quantityB - record.soldQuantityB %>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                                <div class = "row">
+                                    <div class ="col-sm-4">
+                                            Total Quantity of C :
+                                                    <%= record.quantityC %>
+                                    </div>
+                                    <div class ="col-sm-4">
+                                            Sold Quantity of C :
+                                                    <%= record.soldQuantityC %>
+                                    </div>
+                                    <div class ="col-sm-4">
+                                            Left Quantity of C:
+                                                    <%= record.quantityC - record.soldQuantityC %>
+                                    </div>
+                                </div>
+                            </a>
+                   
+                    
+                </div>
 
 
+                <%     }) %>
 
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Year</th>
-                            <th>Quantity</th>
-                            <th>Updated At</th>
-                            <th>Updated By</th>
-                        </tr>
-
-
-                    </tfoot>
-                    <tbody>
-
-                        <%  data.forEach(x => { %>
-
-                        <tr>
-
-                   <%         Object.values(x).forEach(y => { %>
-
-                            <td>
-                                <%= y %>
-                            </td>
-
-                      <%      }) %>
-
-
-                        </tr>
-
-                   <%     }) %>
-
-                    </tbody>
-                </table>
             </div>
+
         </div>
     </div>
 
