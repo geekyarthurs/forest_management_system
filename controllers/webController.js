@@ -133,20 +133,38 @@ exports.sellForest = async (req, res) => {
   if (quality == "A") {
     data = await Member.updateOne(
       { fullName: req.body.customer },
-      { purchasedTrees: user.purchasedTrees * 1 + req.body.quantity * 1 },
-      { purchasedTreesA: user.purchasedTreesA * 1 + req.body.quantity * 1 }
+      {
+        purchasedTrees:
+          parseInt(user.purchasedTrees) + parseInt(user.purchasedTrees)
+      },
+      {
+        purchasedTreesA:
+          parseInt(user.purchasedTreesA) + parseInt(req.body.quantity)
+      }
     );
   } else if (quality == "B") {
     data = await Member.updateOne(
       { fullName: req.body.customer },
-      { purchasedTrees: user.purchasedTrees * 1 + req.body.quantity },
-      { purchasedTreesB: user.purchasedTreesB * 1 + req.body.quantity * 1 }
+      {
+        purchasedTrees:
+          parseInt(user.purchasedTrees) * 1 + parseInt(req.body.quantity)
+      },
+      {
+        purchasedTreesB:
+          parseInt(user.purchasedTreesB) * 1 + parseInt(req.body.quantity) * 1
+      }
     );
   } else {
     data = await Member.updateOne(
       { fullName: req.body.customer },
-      { purchasedTrees: user.purchasedTrees * 1 + req.body.quantity * 1 },
-      { purchasedTreesC: user.purchasedTreesC * 1 + req.body.quantityC * 1 }
+      {
+        purchasedTrees:
+          parseInt(user.purchasedTrees) * 1 + parseInt(req.body.quantity) * 1
+      },
+      {
+        purchasedTreesC:
+          parseInt(user.purchasedTreesC) * 1 + parseInt(req.body.quantityC) * 1
+      }
     );
   }
   let transacted = await Transaction.create({
