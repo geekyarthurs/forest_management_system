@@ -135,7 +135,7 @@ exports.sellForest = async (req, res) => {
       { fullName: req.body.customer },
       {
         purchasedTrees:
-          parseInt(user.purchasedTrees) + parseInt(user.purchasedTrees)
+          parseInt(user.purchasedTrees) + parseInt(req.body.quantity)
       },
       {
         purchasedTreesA:
@@ -163,7 +163,7 @@ exports.sellForest = async (req, res) => {
       },
       {
         purchasedTreesC:
-          parseInt(user.purchasedTreesC) * 1 + parseInt(req.body.quantityC) * 1
+          parseInt(user.purchasedTreesC) * 1 + parseInt(req.body.quantity) * 1
       }
     );
   }
