@@ -182,7 +182,7 @@ exports.sellForest = async (req, res) => {
       { year: new Date().getFullYear() },
       {
         soldQuantity: InitialTrees.soldQuantity * 1 + req.body.quantity * 1,
-        soldQuantityA: InitialTrees.soldQuantityB * 1 + req.body.quantity * 1
+        soldQuantityA: InitialTrees.soldQuantityA * 1 + req.body.quantity * 1
       }
     );
   } else if (quality == "B") {
